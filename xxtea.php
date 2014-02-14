@@ -10,7 +10,7 @@
 |      Roger M. Needham                                    |
 |                                                          |
 | Code Author: Ma Bingyao <mabingyao@gmail.com>            |
-| LastModified: Nov 12, 2013                               |
+| LastModified: Feb 15, 2014                               |
 |                                                          |
 \**********************************************************/
 
@@ -55,6 +55,10 @@ if (!extension_loaded('xxtea')) {
     	return ($n & 0xffffffff);
     }
 
+    function xxtea_mx($sum, $y, $z, $k, $p, $e) {
+        return ((($z >> 5 & 0x07ffffff) ^ $y << 2) + (($y >> 3 & 0x1fffffff) ^ $z << 4)) ^
+               (($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
+    }
 	// public functions
 
     // $str is the encrypt string
@@ -81,14 +85,10 @@ if (!extension_loaded('xxtea')) {
             $e = $sum >> 2 & 3;
             for ($p = 0; $p < $n; $p++) {
                 $y = $v[$p + 1];
-                $mx = xxtea_int32((($z >> 5 & 0x07ffffff) ^ $y << 2) + (($y >> 3 & 0x1fffffff) ^ $z << 4)) ^
-                      xxtea_int32(($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
-                $z = $v[$p] = xxtea_int32($v[$p] + $mx);
+                $z = $v[$p] = xxtea_int32($v[$p] + xxtea_mx($sum, $y, $z, $k, $p, $e));
             }
             $y = $v[0];
-            $mx = xxtea_int32((($z >> 5 & 0x07ffffff) ^ $y << 2) + (($y >> 3 & 0x1fffffff) ^ $z << 4)) ^
-                  xxtea_int32(($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
-            $z = $v[$n] = xxtea_int32($v[$n] + $mx);
+            $z = $v[$n] = xxtea_int32($v[$n] + xxtea_mx($sum, $y, $z, $k, $p, $e));
         }
         return xxtea_long2str($v, false);
     }
@@ -116,14 +116,10 @@ if (!extension_loaded('xxtea')) {
             $e = $sum >> 2 & 3;
             for ($p = $n; $p > 0; $p--) {
                 $z = $v[$p - 1];
-                $mx = xxtea_int32((($z >> 5 & 0x07ffffff) ^ $y << 2) + (($y >> 3 & 0x1fffffff) ^ $z << 4)) ^
-                      xxtea_int32(($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
-                $y = $v[$p] = xxtea_int32($v[$p] - $mx);
+                $y = $v[$p] = xxtea_int32($v[$p] - xxtea_mx($sum, $y, $z, $k, $p, $e));
             }
             $z = $v[$n];
-            $mx = xxtea_int32((($z >> 5 & 0x07ffffff) ^ $y << 2) + (($y >> 3 & 0x1fffffff) ^ $z << 4)) ^
-                  xxtea_int32(($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
-            $y = $v[0] = xxtea_int32($v[0] - $mx);
+            $y = $v[0] = xxtea_int32($v[0] - xxtea_mx($sum, $y, $z, $k, $p, $e));
             $sum = xxtea_int32($sum - XXTEA_DELTA);
         }
         return xxtea_long2str($v, true);
