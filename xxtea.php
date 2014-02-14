@@ -55,27 +55,30 @@ if (!extension_loaded('xxtea')) {
     	return ($n & 0xffffffff);
     }
 
-    function xxtea_mx($sum, $y, $z, $k, $p, $e) {
+    function xxtea_mx($sum, $y, $z, $p, $e, $k) {
         return ((($z >> 5 & 0x07ffffff) ^ $y << 2) + (($y >> 3 & 0x1fffffff) ^ $z << 4)) ^
                (($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
     }
-	// public functions
 
-    // $str is the encrypt string
-    // $key is the encrypt key. It is the same as the decrypt key. The key must be 16 bytes.
-    function xxtea_encrypt($str, $key) {
-        if ($str == "") {
-            return "";
-        }
-        $v = xxtea_str2long($str, true);
-        $k = xxtea_str2long($key, false);
+    function xxtea_fixk($k) {
         if (count($k) < 4) {
             for ($i = count($k); $i < 4; $i++) {
                 $k[$i] = 0;
             }
         }
-        $n = count($v) - 1;
+        return $k;
+    }
+	// public functions
 
+    // $str is the encrypt string
+    // $key is the encrypt key. It is the same as the decrypt key.
+    function xxtea_encrypt($str, $key) {
+        if ($str == "") {
+            return "";
+        }
+        $v = xxtea_str2long($str, true);
+        $k = xxtea_fixk(xxtea_str2long($key, false));
+        $n = count($v) - 1;
         $z = $v[$n];
         $y = $v[0];
         $q = floor(6 + 52 / ($n + 1));
@@ -85,27 +88,22 @@ if (!extension_loaded('xxtea')) {
             $e = $sum >> 2 & 3;
             for ($p = 0; $p < $n; $p++) {
                 $y = $v[$p + 1];
-                $z = $v[$p] = xxtea_int32($v[$p] + xxtea_mx($sum, $y, $z, $k, $p, $e));
+                $z = $v[$p] = xxtea_int32($v[$p] + xxtea_mx($sum, $y, $z, $p, $e, $k));
             }
             $y = $v[0];
-            $z = $v[$n] = xxtea_int32($v[$n] + xxtea_mx($sum, $y, $z, $k, $p, $e));
+            $z = $v[$n] = xxtea_int32($v[$n] + xxtea_mx($sum, $y, $z, $p, $e, $k));
         }
         return xxtea_long2str($v, false);
     }
 
     // $str is the decrypt string
-    // $key is the decrypt key. It is the same as the encrypt key. The key must be 16 bytes.
+    // $key is the decrypt key. It is the same as the encrypt key.
     function xxtea_decrypt($str, $key) {
         if ($str == "") {
             return "";
         }
         $v = xxtea_str2long($str, false);
-        $k = xxtea_str2long($key, false);
-        if (count($k) < 4) {
-            for ($i = count($k); $i < 4; $i++) {
-                $k[$i] = 0;
-            }
-        }
+        $k = xxtea_fixk(xxtea_str2long($key, false));
         $n = count($v) - 1;
 
         $z = $v[$n];
@@ -116,10 +114,10 @@ if (!extension_loaded('xxtea')) {
             $e = $sum >> 2 & 3;
             for ($p = $n; $p > 0; $p--) {
                 $z = $v[$p - 1];
-                $y = $v[$p] = xxtea_int32($v[$p] - xxtea_mx($sum, $y, $z, $k, $p, $e));
+                $y = $v[$p] = xxtea_int32($v[$p] - xxtea_mx($sum, $y, $z, $p, $e, $k));
             }
             $z = $v[$n];
-            $y = $v[0] = xxtea_int32($v[0] - xxtea_mx($sum, $y, $z, $k, $p, $e));
+            $y = $v[0] = xxtea_int32($v[0] - xxtea_mx($sum, $y, $z, $p, $e, $k));
             $sum = xxtea_int32($sum - XXTEA_DELTA);
         }
         return xxtea_long2str($v, true);
