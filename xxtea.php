@@ -3,7 +3,7 @@
 |                                                          |
 | xxtea.php                                                |
 |                                                          |
-| XXTEA encryption arithmetic library for PHP.             |
+| XXTEA encryption algorithm library for PHP.              |
 |                                                          |
 | Encryption Algorithm Authors:                            |
 |      David J. Wheeler                                    |
@@ -70,7 +70,7 @@ if (!extension_loaded('xxtea')) {
     }
 	// public functions
 
-    // $str is the encrypt string
+    // $str is the string to be encrypted.
     // $key is the encrypt key. It is the same as the decrypt key.
     function xxtea_encrypt($str, $key) {
         if ($str == "") {
@@ -96,7 +96,7 @@ if (!extension_loaded('xxtea')) {
         return xxtea_long2str($v, false);
     }
 
-    // $str is the decrypt string
+    // $str is the string to be decrypted.
     // $key is the decrypt key. It is the same as the encrypt key.
     function xxtea_decrypt($str, $key) {
         if ($str == "") {
