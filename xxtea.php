@@ -10,7 +10,7 @@
 |      Roger M. Needham                                    |
 |                                                          |
 | Code Author: Ma Bingyao <mabingyao@gmail.com>            |
-| LastModified: Mar 9, 2015                                |
+| LastModified: Mar 10, 2015                               |
 |                                                          |
 \**********************************************************/
 
@@ -74,7 +74,6 @@ if (!extension_loaded('xxtea')) {
             $k = self::fixk(self::str2long($key, false));
             $n = count($v) - 1;
             $z = $v[$n];
-            $y = $v[0];
             $q = floor(6 + 52 / ($n + 1));
             $sum = 0;
             while (0 < $q--) {
@@ -100,7 +99,6 @@ if (!extension_loaded('xxtea')) {
             $k = self::fixk(self::str2long($key, false));
             $n = count($v) - 1;
 
-            $z = $v[$n];
             $y = $v[0];
             $q = floor(6 + 52 / ($n + 1));
             $sum = self::int32($q * self::DELTA);
