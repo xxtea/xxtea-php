@@ -1,6 +1,5 @@
 <?php
-require_once("xxtea.php");
-require_once("PHPUnit/Framework.php");
+require("vendor/autoload.php");
 
 class XXTEATest extends PHPUnit_Framework_TestCase {
     public function testEncrypt() {
