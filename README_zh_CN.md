@@ -4,6 +4,10 @@
     <img src="https://avatars1.githubusercontent.com/u/6683159?v=3&s=86" alt="XXTEA logo" title="XXTEA" align="right" />
 </a>
 
+[![Packagist](https://img.shields.io/packagist/v/xxtea/xxtea.svg)](https://packagist.org/packages/xxtea/xxtea)
+[![Packagist Download](https://img.shields.io/packagist/dm/xxtea/xxtea.svg)](https://packagist.org/packages/xxtea/xxtea)
+[![License](https://img.shields.io/packagist/l/xxtea/xxtea.svg)](https://packagist.org/packages/xxtea/xxtea)
+
 ## 简介
 
 XXTEA 是一个快速安全的加密算法。本项目是 XXTEA 加密算法的 PHP 实现。
