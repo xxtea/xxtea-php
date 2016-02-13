@@ -4,6 +4,7 @@
     <img src="https://avatars1.githubusercontent.com/u/6683159?v=3&s=86" alt="XXTEA logo" title="XXTEA" align="right" />
 </a>
 
+[![Build Status](https://travis-ci.org/xxtea/xxtea-php.svg?branch=master)](https://travis-ci.org/xxtea/xxtea-php)
 [![Packagist](https://img.shields.io/packagist/v/xxtea/xxtea.svg)](https://packagist.org/packages/xxtea/xxtea)
 [![Packagist Download](https://img.shields.io/packagist/dm/xxtea/xxtea.svg)](https://packagist.org/packages/xxtea/xxtea)
 [![License](https://img.shields.io/packagist/l/xxtea/xxtea.svg)](https://packagist.org/packages/xxtea/xxtea)
