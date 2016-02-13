@@ -1,6 +1,4 @@
 <?php
-require("vendor/autoload.php");
-
 class XXTEATest extends PHPUnit_Framework_TestCase {
     public function testEncrypt() {
         $str = "Hello World! 你好，中国🇨🇳！";
