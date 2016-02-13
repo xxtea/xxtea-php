@@ -52,8 +52,7 @@ if (!extension_loaded('xxtea')) {
         }
 
         private static function mx($sum, $y, $z, $p, $e, $k) {
-            return ((($z >> 5 & 0x07ffffff) ^ $y << 2) + (($y >> 3 & 0x1fffffff) ^ $z << 4)) ^
-                   (($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
+            return (($z >> 5 ^ $y << 2) + ($y >> 3 ^ $z << 4)) ^ (($sum ^ $y) + ($k[$p & 3 ^ $e] ^ $z));
         }
 
         private static function fixk($k) {
